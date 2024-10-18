@@ -1,0 +1,8 @@
+.secrets
+flask-app/__pycache__/app.cpython-311.pyc
+flask-app/Dockerfile
+init-scripts/PG_db_xor_app.sh
+docker-compose.yml
+nginx.conf
+static/script.js
+static/style.css
