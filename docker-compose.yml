@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/db_name  # Use secret for DB name
+      - POSTGRES_USER_FILE=/run/secrets/db_username  # Use secret for user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password  # Use secret for password
+    secrets:
+      - db_password
+      - db_username
+      - db_name
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d  # Mount the init scripts
+
+  flask_app:
+    image: my_flask_app 
+    secrets:
+      - db_password
+      - db_username
+      - db_name
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask-app:/app  
+      - ./flask-app/templates:/app/templates  
+      - ./static:/app/static  
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./static/:/xor-app/static/  
+    depends_on:
+      - flask_app
+
+secrets:
+  db_username:
+    file: .secrets/db_username.txt
+  db_password:
+    file: .secrets/db_password.txt
+  db_name:
+    file: .secrets/db_name.txt
+
+volumes:
+  db-data:
