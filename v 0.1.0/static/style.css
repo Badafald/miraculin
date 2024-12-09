@@ -13,6 +13,15 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.container-info {
+    width: 30%;
+    margin: auto;
+    background: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(15, 14, 7, 0.1);
+}
+}
 .input-box, .output-box, .decode-box {
     margin-bottom: 20px;
 }
@@ -30,7 +39,7 @@ body {
     background-color: #0056b3;
 }
 .success {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     transition: background-color 0.3s;
 }
 .error {

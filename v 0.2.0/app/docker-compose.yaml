@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  encryption_service:
+    build:
+      context: ./encryption_service
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    restart: always
+
+  storage_service:
+    build:
+      context: ./storage_service
+      dockerfile: Dockerfile
+    secrets:
+      - db_password
+      - db_username
+      - db_name
+    depends_on:
+      - db
+    ports:
+      - "5002:5002"
+    restart: always
+
+  web_interface_service:
+    build:
+      context: ./web_interface_service
+      dockerfile: Dockerfile
+    depends_on:
+      - encryption_service
+      - storage_service
+    ports:
+      - "80:5000"
+    restart: always
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/db_name  
+      - POSTGRES_USER_FILE=/run/secrets/db_username  
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password  
+    secrets:
+      - db_username
+      - db_password
+      - db_name
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: always
+
+secrets:
+  db_username:
+    file: .secrets/db_username.txt
+  db_password:
+    file: .secrets/db_password.txt
+  db_name:
+    file: .secrets/db_name.txt
+
+volumes:
+  db_data:
