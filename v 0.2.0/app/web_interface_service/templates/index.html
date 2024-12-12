@@ -1,38 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-    <link rel="stylesheet" href="/static/style.css"> 
-    <script src="/static/script.js"></script>  
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Encryption App</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js" defer></script>
 </head>
-
 <body>
 
-<div class="container">
-    <h1>Simple Encryption & Decryption App</h1>
-    
-    <div class="input-box">
-        <label for="user_input">Enter up to 3 symbols (salted with "miraculin"):</label>
-        <input type="text" id="user_input" maxlength="3">
-        <button class="btn" id="encrypt-button" onclick="encryptInput()">XOR it</button>
-        <span id="error-message-encrypt-button" class="error" style="display:none;"></span>
-    </div>
+<header class="header">
+    <h1>Simple Encryption &amp; Decryption App</h1>
+</header>
 
-    <div class="decode-box">
-        <label for="selected_hash">Select Encrypted String:</label>
-        <input type="text" id="selected_hash" readonly>
-        <button class="btn" id="decode-button" onclick="decodeInput()">DeXOR</button>
-        <span id="error-message-decode-button" class="error" style="display:none;"></span>
-        <p id="decoded_output"></p>
-    </div>
+<main class="main-content">
 
-    <button class="btn" id="delete-button" onclick="deleteInput()">Delete Selected</button>
-    <span id="error-message-delete-button" class="error" style="display:none;"></span>
+    <!-- Encryption Input Section -->
+    <section class="section input-section">
+        <h2>Encrypt a String</h2>
+        <div class="input-group">
+            <label for="user_input">Enter up to 3 symbols (salted with "miraculin"):</label>
+            <input type="text" id="user_input" maxlength="3" placeholder="e.g. abc">
+            <button class="btn btn-primary" id="encrypt-button" onclick="encryptInput()">XOR it</button>
+        </div>
+        <span id="error-message-encrypt-button" class="error-message"></span>
+    </section>
 
-    <div class="output-box">
-        <h2>XORed Strings</h2>
+    <!-- Decryption Input Section -->
+    <section class="section decode-section">
+        <h2>Decrypt an Encrypted String</h2>
+        <div class="input-group">
+            <label for="selected_hash">Selected Encrypted String:</label>
+            <input type="text" id="selected_hash" readonly>
+            <button class="btn btn-primary" id="decode-button" onclick="decodeInput()">DeXOR</button>
+        </div>
+        <span id="error-message-decode-button" class="error-message"></span>
+        <p id="decoded_output" class="decoded-output"></p>
+    </section>
+
+    <!-- Delete Section -->
+    <section class="section delete-section">
+        <h2>Manage Entries</h2>
+        <div class="action-group">
+            <button class="btn btn-danger" id="delete-button" onclick="deleteInput()">Delete Selected</button>
+            <span id="error-message-delete-button" class="error-message"></span>
+        </div>
+    </section>
+
+    <!-- Output Table Section -->
+    <section class="section output-section">
+        <h2>Encrypted Strings (XORed)</h2>
         <div class="table-container">
             <table>
                 <thead>
@@ -44,17 +61,25 @@
                 </thead>
                 <tbody>
                     {% for id, xor_value in entries %}
-                        <tr>
-                            <td>{{ id }}</td>
-                            <td>{{ xor_value }}</td>
-                            <td><input type="radio" name="hash" value="{{ xor_value }}" onchange="document.getElementById('selected_hash').value = this.value;"></td>
-                        </tr>
+                    <tr>
+                        <td>{{ id }}</td>
+                        <td>{{ xor_value }}</td>
+                        <td>
+                            <input type="radio" name="hash" value="{{ xor_value }}"
+                                onchange="document.getElementById('selected_hash').value = this.value;">
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <p>© 2024 Simple Encryption App</p>
+</footer>
 
 </body>
 </html>
