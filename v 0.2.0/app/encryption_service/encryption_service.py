@@ -39,10 +39,12 @@ def decrypt_route():
 
 # Health and readiness endpoints
 @app.route('/healthz', methods=['GET'])
+@limiter.exempt
 def healthz():
     return "OK", 200
 
 @app.route('/ready', methods=['GET'])
+@limiter.exempt
 def ready():
 
     return "OK", 200

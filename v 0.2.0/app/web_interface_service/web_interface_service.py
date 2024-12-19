@@ -43,10 +43,12 @@ def delete_route():
 
 # Health and readiness endpoints
 @app.route('/healthz', methods=['GET'])
+@limiter.exempt
 def healthz():
     return "OK", 200
 
 @app.route('/ready', methods=['GET'])
+@limiter.exempt
 def ready():
     # We might check if we can reach encryption and storage services here.
     try:

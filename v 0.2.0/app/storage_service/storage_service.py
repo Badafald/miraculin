@@ -62,10 +62,12 @@ def delete_encrypted_string():
 
 # Health and readiness endpoints
 @app.route('/healthz', methods=['GET'])
+@limiter.exempt
 def healthz():
     return "OK", 200
 
 @app.route('/ready', methods=['GET'])
+@limiter.exempt
 def ready():
     # Check database connectivity for readiness
     try:
