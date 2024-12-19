@@ -16,18 +16,16 @@ def get_db_connection():
     with open('/run/secrets/db_password', 'r') as f:
         db_password = f.read().strip()
 
-    # Establish the database connection
     return psycopg2.connect(
         dbname=db_name,
         user=db_user,
         password=db_password,
-        host='db',  # This should match the service name in Docker Compose
+        host='db',  # This should match the service name in Docker Compose or K8s Service
         port=5432
     )
 
-
 @app.route('/store', methods=['POST'])
-@limiter.limit("10 per minute")  # Limit to 10 store requests per minute per IP
+@limiter.limit("10 per minute")
 def store_encrypted_string():
     encrypted_string = request.json.get('encrypted_string', '')
     conn = get_db_connection()
@@ -40,7 +38,7 @@ def store_encrypted_string():
     return jsonify({'success': True, 'id': new_id})
 
 @app.route('/retrieve', methods=['GET'])
-@limiter.limit("5 per minute")  # Limit to 5 retrieval requests per minute per IP
+@limiter.limit("5 per minute")
 def retrieve_encrypted_strings():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -51,7 +49,7 @@ def retrieve_encrypted_strings():
     return jsonify({'success': True, 'entries': rows})
 
 @app.route('/delete', methods=['POST'])
-@limiter.limit("10 per minute")  # Limit to 10 delete requests per minute per IP
+@limiter.limit("10 per minute")
 def delete_encrypted_string():
     encrypted_string = request.json.get('encrypted_string', '')
     conn = get_db_connection()
@@ -61,6 +59,21 @@ def delete_encrypted_string():
     cur.close()
     conn.close()
     return jsonify({'success': True})
+
+# Health and readiness endpoints
+@app.route('/healthz', methods=['GET'])
+def healthz():
+    return "OK", 200
+
+@app.route('/ready', methods=['GET'])
+def ready():
+    # Check database connectivity for readiness
+    try:
+        conn = get_db_connection()
+        conn.close()
+        return "OK", 200
+    except:
+        return "Not Ready", 503
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

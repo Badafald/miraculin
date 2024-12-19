@@ -37,5 +37,15 @@ def decrypt_route():
         return jsonify({'success': True, 'decrypted': decrypted_value})
     return jsonify({'success': False, 'error': 'Failed to decrypt'}), 400
 
+# Health and readiness endpoints
+@app.route('/healthz', methods=['GET'])
+def healthz():
+    return "OK", 200
+
+@app.route('/ready', methods=['GET'])
+def ready():
+
+    return "OK", 200
+
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
