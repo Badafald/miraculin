@@ -8,21 +8,18 @@ app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["5 per minute"])
 
 def get_db_connection():
-    # Read secrets from the Docker secrets path
-    with open('/run/secrets/db_name', 'r') as f:
-        db_name = f.read().strip()
-    with open('/run/secrets/db_username', 'r') as f:
-        db_user = f.read().strip()
-    with open('/run/secrets/db_password', 'r') as f:
-        db_password = f.read().strip()
-
+    db_name = os.environ["DB_NAME"]
+    db_user = os.environ["DB_USERNAME"]
+    db_password = os.environ["DB_PASSWORD"]
+    
     return psycopg2.connect(
         dbname=db_name,
         user=db_user,
         password=db_password,
-        host='db',  # This should match the service name in Docker Compose or K8s Service
-        port=5432
+        host=os.environ.get("DB_HOST", "db"),
+        port=os.environ.get("DB_PORT", "5432")
     )
+
 
 @app.route('/store', methods=['POST'])
 @limiter.limit("10 per minute")
