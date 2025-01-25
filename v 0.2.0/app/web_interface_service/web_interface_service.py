@@ -6,8 +6,9 @@ import requests
 app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["5 per minute"])
 
-ENCRYPTION_SERVICE_URL = 'http://encryption_service:5001'
-STORAGE_SERVICE_URL = 'http://storage_service:5002'
+ENCRYPTION_SERVICE_URL = os.environ.get('ENCRYPTION_SERVICE_URL', 'http://encryption-service:5001')
+STORAGE_SERVICE_URL = os.environ.get('STORAGE_SERVICE_URL', 'http://storage-service:5002')
+
 
 @app.route('/')
 @limiter.limit("5 per minute")
