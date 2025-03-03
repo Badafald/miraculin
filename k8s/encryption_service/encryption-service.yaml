@@ -1,0 +1,13 @@
+# encryption-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: encryption-service
+  namespace: miraculin-ns
+spec:
+  selector:
+    app: encryption-service
+  ports:
+    - port: 5001
+      targetPort: 5001
+  type: ClusterIP

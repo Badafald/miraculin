@@ -1,0 +1,13 @@
+# web-interface-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-interface-service
+  namespace: miraculin-ns
+spec:
+  selector:
+    app: web-interface-service
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: LoadBalancer

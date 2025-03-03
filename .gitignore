@@ -1,2 +1,6 @@
-v \0.1.0/.secrets
-v \0.2.0/app/.secrets
+app/.secrets/
+k8s/secrets*
+.gitignore
+*.venv*
+*__pycache__*
+*.pytest_cache*

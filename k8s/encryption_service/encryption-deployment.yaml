@@ -1,0 +1,43 @@
+# encryption-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encryption-service
+  namespace: miraculin-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: encryption-service
+  template:
+    metadata:
+      labels:
+        app: encryption-service
+    spec:
+      containers:
+        - name: encryption-service
+          image: badafald/miraculin-encrypt:v0.2.2
+          ports:
+            - containerPort: 5001
+          imagePullPolicy: Always
+          resources:  
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            runAsUser: 1000
