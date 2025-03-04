@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: encryption-service
-  namespace: miraculin-ns
+  namespace: test-miraculin-ns
 spec:
   replicas: 1
   selector:
