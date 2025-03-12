@@ -1,5 +1,5 @@
 app/.secrets/
-k8s/secrets*
+*secrets*
 .gitignore
 *.venv*
 *__pycache__*
