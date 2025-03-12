@@ -1,11 +1,8 @@
 from flask import Flask, request, jsonify
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 import psycopg2
 import os
 
 app = Flask(__name__)
-limiter = Limiter(get_remote_address, app=app, default_limits=["5 per minute"])
 
 def get_db_connection():
     db_name = os.environ["DB_NAME"]
@@ -20,9 +17,7 @@ def get_db_connection():
         port=os.environ.get("DB_PORT", "5432")
     )
 
-
 @app.route('/store', methods=['POST'])
-@limiter.limit("10 per minute")
 def store_encrypted_string():
     encrypted_string = request.json.get('encrypted_string', '')
     conn = get_db_connection()
@@ -35,7 +30,6 @@ def store_encrypted_string():
     return jsonify({'success': True, 'id': new_id})
 
 @app.route('/retrieve', methods=['GET'])
-@limiter.limit("5 per minute")
 def retrieve_encrypted_strings():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -46,7 +40,6 @@ def retrieve_encrypted_strings():
     return jsonify({'success': True, 'entries': rows})
 
 @app.route('/delete', methods=['POST'])
-@limiter.limit("10 per minute")
 def delete_encrypted_string():
     encrypted_string = request.json.get('encrypted_string', '')
     conn = get_db_connection()
@@ -59,14 +52,11 @@ def delete_encrypted_string():
 
 # Health and readiness endpoints
 @app.route('/healthz', methods=['GET'])
-@limiter.exempt
 def healthz():
     return "OK", 200
 
 @app.route('/ready', methods=['GET'])
-@limiter.exempt
 def ready():
-    # Check database connectivity for readiness
     try:
         conn = get_db_connection()
         conn.close()
