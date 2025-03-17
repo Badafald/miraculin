@@ -11,7 +11,7 @@ spec:
     path: helm
     helm:
       valueFiles:
-        - values.yaml
+        - values-storage.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: test-miraculin-ns
