@@ -1,0 +1,34 @@
+{{- range $key, $service := .Values.services }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service.name }}
+  namespace: {{ include "miraculin.namespace" $ }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $service.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $service.name }}
+    spec:
+      containers:
+        - name: {{ $service.name }}
+          image: {{ $.Values.repo }}-{{ $key }}:{{ $service.version }}
+          ports:
+            - containerPort: {{ $service.targetPort }}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: {{ $service.resources.requests.cpu }}
+              memory: {{ $service.resources.requests.memory }}
+            limits:
+              cpu: {{ $service.resources.limits.cpu }}
+              memory: {{ $service.resources.limits.memory }}
+          {{- if eq $key "storage" }}
+          {{ include "miraculin.envVars" $ | indent 10 }}
+          {{- end }}
+---
+{{- end }}

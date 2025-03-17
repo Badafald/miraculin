@@ -1,8 +1,0 @@
-apiVersion: v2
-name: web
-description: Helm chart for Miraculin WebService
-type: application
-version: 0.1.0
-appVersion: "0.2.4"
-maintainers:
-  - name: badafald
