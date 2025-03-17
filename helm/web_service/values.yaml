@@ -1,0 +1,20 @@
+webService:
+  image: badafald/miraculin-web
+  tag: v0.2.4
+  service:
+    port: 5000
+
+replicaCount: 1
+
+setEnvVar: 
+  test: true
+  prod: false
+
+setEnvTest: test-muraculin-ns
+setEnvProd: miraculin-ns
+
+#set ENCRYPTION_SERVICE_URL
+encryptionServiceURL: http://encryption-service:5001
+
+#set STORAGE_SERVICE_URL
+storageServiceURL: http://storage-service:5002

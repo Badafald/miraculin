@@ -1,0 +1,13 @@
+# storage-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage-service
+  namespace: test-miraculin-ns
+spec:
+  selector:
+    app: storage-service
+  ports:
+    - port: 5002
+      targetPort: 5002
+  type: ClusterIP

@@ -1,0 +1,8 @@
+apiVersion: v2
+name: encryption
+description: Helm chart for Miraculin Encryption Service
+type: application
+version: 0.1.0
+appVersion: "0.2.3"
+maintainers:
+  - name: badafald
