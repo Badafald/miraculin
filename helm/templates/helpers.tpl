@@ -16,7 +16,7 @@ Returns environment-specific variables such as DB_HOST and DB_PORT.
 - name: DB_HOST
   value: {{ ternary .Values.db.prod.host .Values.db.test.host .Values.setEnvVar.prod }}
 - name: DB_PORT
-  value: {{ ternary .Values.db.prod.port .Values.db.test.port .Values.setEnvVar.prod }}
+  value: "{{ ternary .Values.db.prod.port .Values.db.test.port .Values.setEnvVar.prod }}"
 {{- end -}}
 
 {{/*
