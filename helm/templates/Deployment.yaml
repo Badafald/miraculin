@@ -28,7 +28,8 @@ spec:
               cpu: {{ $service.resources.limits.cpu }}
               memory: {{ $service.resources.limits.memory }}
           {{- if eq $key "storage" }}
-          {{ include "miraculin.envVars" $ | indent 10 }}
+          env:
+          {{- include "miraculin.envVars" $ | nindent 12 }}
           {{- end }}
 ---
 {{- end }}
