@@ -1,0 +1,22 @@
+# only 1 environment can be specified for deployment
+# use (true/false) or (false/true) only, made for security considerations
+
+setEnvVar:
+  test: true
+  # Only one of these two can be true
+  prod: false
+
+repo: badafald/miraculin
+
+services:
+  web:
+    name: web-interface-service
+    version: v0.2.4
+    targetPort: 5000
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi

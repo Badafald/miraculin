@@ -1,0 +1,32 @@
+# only 1 environment can be specified for deployment
+# use (true/false) or (false/true) only, made for security considerations
+
+setEnvVar:
+  test: true
+  # Only one of these two can be true
+  prod: false
+
+repo: badafald/miraculin
+
+db:
+  test:
+    host: "192.168.0.103"
+    port: "5432"
+  prod:
+    host: "192.168.0.103" #same for now
+    port: "5432"
+
+
+services:
+  storage:
+    name: storage-service
+    version: v0.2.4
+    targetPort: 5002
+    resources:
+      requests:
+        cpu: 200m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+
