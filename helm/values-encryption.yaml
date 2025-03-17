@@ -13,6 +13,7 @@ services:
     name: encryption-service
     version: v0.2.3
     targetPort: 5001
+    port: 5001
     resources:
       requests:
         cpu: 100m

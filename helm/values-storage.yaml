@@ -22,6 +22,7 @@ services:
     name: storage-service
     version: v0.2.4
     targetPort: 5002
+    port: 5002
     resources:
       requests:
         cpu: 200m

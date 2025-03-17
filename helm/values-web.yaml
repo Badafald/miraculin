@@ -13,6 +13,7 @@ services:
     name: web-interface-service
     version: v0.2.4
     targetPort: 5000
+    port: 5000
     resources:
       requests:
         cpu: 100m
