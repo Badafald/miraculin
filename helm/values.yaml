@@ -10,11 +10,6 @@ setEnvTest: test-miraculin-ns
 setEnvProd: miraculin-ns
 
 
-
-
-
-repo: badafald/miraculin  # Centralized repo setting
-
 db:
   test:
     host: "192.168.0.103"
@@ -26,17 +21,31 @@ db:
 services:
   storage:
     name: storage-service
-    version: v0.2.3
+    version: v0.2.4
     port: 5002
     targetPort: 5002
     type: ClusterIP
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
 
   encryption:
     name: encryption-service
-    version: v0.2.2
+    version: v0.2.3
     port: 5001
     targetPort: 5001
     type: ClusterIP
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "250m"
+        memory: "256Mi"
 
   web:
     name: web-interface-service
@@ -47,3 +56,10 @@ services:
     nodePort:
       test: 31007
       prod: 31008  # Different port for production
+    resources:
+      requests:
+        cpu: "150m"
+        memory: "128Mi"
+      limits:
+        cpu: "300m"
+        memory: "256Mi"
