@@ -10,7 +10,7 @@ repo: badafald/miraculin
 
 services:
   encryption:
-    name: encryption
+    name: encrypt
     version: v0.2.3
     targetPort: 5001
     port: 5001
