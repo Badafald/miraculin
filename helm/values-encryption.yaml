@@ -9,7 +9,7 @@ setEnvVar:
 repo: badafald/miraculin
 
 services:
-  encryption:
+  encrypt:
     name: encrypt
     version: v0.2.3
     targetPort: 5001
