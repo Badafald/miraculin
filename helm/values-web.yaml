@@ -10,7 +10,7 @@ repo: badafald/miraculin
 
 services:
   web:
-    name: web-interface-service
+    name: web
     version: v0.2.4
     targetPort: 5000
     port: 5000
