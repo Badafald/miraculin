@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/Badafald/miraculin.git'
     targetRevision: HEAD
-    path: 'argocd'   # This folder contains the child app definitions
+    path: 'argocd'   
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
