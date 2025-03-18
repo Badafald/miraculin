@@ -25,3 +25,6 @@ services:
       limits:
         cpu: 200m
         memory: 256Mi
+    dependencies:
+      ENCRYPTION_SERVICE_URL: http://encrypt:5001
+      STORAGE_SERVICE_URL: http://storage:5002
