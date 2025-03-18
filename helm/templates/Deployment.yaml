@@ -27,15 +27,19 @@ spec:
             limits:
               cpu: {{ $service.resources.limits.cpu }}
               memory: {{ $service.resources.limits.memory }}
-          {{- if eq $key "storage" }}
+{{- $envVars := include "miraculin.envVars" $ | trim }}
+{{- $storageSecrets := include "miraculin.storageSecrets" $ | trim }}
+{{- $envDependencies := include "miraculin.envDependencies" $service | trim }}
+{{- if or $envVars $storageSecrets $envDependencies }}
           env:
-            {{ include "miraculin.storageSecrets" $ | indent 12 }}
-            {{ include "miraculin.envVars" $ | indent 12 }}
-            {{ include "miraculin.envDependencies" $service | indent 12 }}
-          {{- else }}
-          env:
-            {{ include "miraculin.envVars" $ | indent 12 }}
-            {{ include "miraculin.envDependencies" $service | indent 12 }}
-          {{- end }}
+{{- if eq $key "storage" }}
+{{ $storageSecrets | indent 12 }}
+{{ $envVars | indent 12 }}
+{{ $envDependencies | indent 12 }}
+{{- else }}
+{{ $envVars | indent 12 }}
+{{ $envDependencies | indent 12 }}
+{{- end }}
+{{- end }}
 ---
 {{- end }}
