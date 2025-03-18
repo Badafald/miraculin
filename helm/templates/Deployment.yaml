@@ -42,4 +42,19 @@ spec:
 {{- end }}
 {{- end }}
 ---
+{{- if eq $key "web" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $service.name }}
+  namespace: {{ include "miraculin.namespace" $ }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{ $service.name }}
+  ports:
+    - port: {{ $service.port }}
+      targetPort: {{ $service.targetPort }}
+      nodePort: {{ include "miraculin.nodePort" $ }}
+{{- end }}
 {{- end }}
