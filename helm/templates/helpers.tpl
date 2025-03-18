@@ -29,3 +29,42 @@ Returns the correct nodePort based on the environment.
 {{ .Values.services.web.nodePort.test }}
 {{- end -}}
 {{- end -}}
+
+
+
+{{/*
+Dynamically generate environment variables for a service if defined
+*/}}
+{{- define "miraculin.envDependencies" -}}
+{{- with .dependencies }}
+{{- range $key, $value := . }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+
+{{/*
+Returns environment-specific DB secrets for storage service
+*/}}
+{{- define "miraculin.storageSecrets" -}}
+- name: DB_NAME
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: db_name
+- name: DB_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: db_username
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: db-secrets
+      key: db_password
+{{- end }}
+
+
+
