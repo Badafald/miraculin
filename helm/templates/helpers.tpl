@@ -13,12 +13,13 @@ Returns the correct namespace based on the environment.
 Returns environment-specific variables such as DB_HOST and DB_PORT.
 */}}
 {{- define "miraculin.envVars" -}}
+{{- if .Values.db }}
 - name: DB_HOST
   value: "{{ ternary .Values.db.prod.host .Values.db.test.host .Values.setEnvVar.prod }}"
 - name: DB_PORT
   value: "{{ ternary .Values.db.prod.port .Values.db.test.port .Values.setEnvVar.prod }}"
-{{- end -}}
-
+{{- end }}
+{{- end }}
 {{/*
 Returns the correct nodePort based on the environment.
 */}}
