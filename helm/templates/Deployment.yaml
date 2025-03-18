@@ -29,7 +29,7 @@ spec:
               memory: {{ $service.resources.limits.memory }}
 {{- $envVars := include "miraculin.envVars" $ | trim }}
 {{- $storageSecrets := include "miraculin.storageSecrets" $ | trim }}
-{{- $envDependencies := include "miraculin.envDependencies" $service | trim }}
+{{ include "miraculin.envDependencies" $service | indent 12 }}
 {{- if or $envVars $storageSecrets $envDependencies }}
           env:
 {{- if eq $key "storage" }}
