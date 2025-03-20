@@ -87,8 +87,7 @@ pipeline {
                         script {
                             def ENC_VER = readFile('app/encryption_service/version').trim()
                             def ENC_IMAGE = "badafald/miraculin-encrypt:${ENC_VER}"
-                            def encExists = sh(script: "docker manifest inspect ${ENC_IMAGE} > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
-
+                            def encExists = sh(script: "set +e; docker manifest inspect ${ENC_IMAGE} > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
                             if (encExists != '0') {
                                 sh "docker build -t ${ENC_IMAGE} -f app/encryption_service/Dockerfile app/encryption_service"
                                 docker.withRegistry(env.DOCKER_REGISTRY, env.CREDENTIALS_ID) {
@@ -107,8 +106,7 @@ pipeline {
                         script {
                             def STOR_VER = readFile('app/storage_service/version').trim()
                             def STOR_IMAGE = "badafald/miraculin-storage:${STOR_VER}"
-                            def storExists = sh(script: "docker manifest inspect ${STOR_IMAGE} > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
-
+                            def encExists = sh(script: "docker manifest inspect ${ENC_IMAGE} > /dev/null 2>&1 && echo 0 || echo 1", returnStdout: true).trim()
                             if (storExists != '0') {
                                 sh "docker build -t ${STOR_IMAGE} -f app/storage_service/Dockerfile app/storage_service"
                                 docker.withRegistry(env.DOCKER_REGISTRY, env.CREDENTIALS_ID) {
@@ -127,8 +125,7 @@ pipeline {
                         script {
                             def WEB_VER = readFile('app/web_interface_service/version').trim()
                             def WEB_IMAGE = "badafald/miraculin-web:${WEB_VER}"
-                            def webExists = sh(script: "docker manifest inspect ${WEB_IMAGE} > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
-
+                            def webExists = sh(script: "set +e; docker manifest inspect ${WEB_IMAGE} > /dev/null 2>&1; echo \$?", returnStdout: true).trim()
                             if (webExists != '0') {
                                 sh "docker build -t ${WEB_IMAGE} -f app/web_interface_service/Dockerfile app/web_interface_service"
                                 docker.withRegistry(env.DOCKER_REGISTRY, env.CREDENTIALS_ID) {
