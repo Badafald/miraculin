@@ -14,7 +14,7 @@ services:
     version: v0.2.4
     targetPort: 5000
     port: 5000
-    type: LoadBalancer
+    type: NodePort
     nodePort:
       test: 32007
       prod: 31007
