@@ -1,60 +1,59 @@
-{{- range $key, $service := .Values.services }}
+{{- range $key, $svc := .Values.services }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $service.name }}
+  name: {{ $svc.name }}-service
   namespace: {{ include "miraculin.namespace" $ }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ $service.name }}
+      app: {{ $svc.name }}-service
   template:
     metadata:
       labels:
-        app: {{ $service.name }}
+        app: {{ $svc.name }}-service
     spec:
       containers:
-        - name: {{ $service.name }}
-          image: {{ $.Values.repo }}-{{ $key }}:{{ $service.version }}
+        - name: {{ $svc.name }}-service
+          image: {{ $.Values.repo }}-{{ $svc.name }}:{{ $svc.version }}
           ports:
-            - containerPort: {{ $service.targetPort }}
+            - containerPort: {{ $svc.targetPort }}
           imagePullPolicy: Always
+          env:
+          {{- if eq $svc.name "web" }}
+            - name: ENCRYPTION_SERVICE_URL
+              value: {{ $svc.dependencies.ENCRYPTION_SERVICE_URL }}
+            - name: STORAGE_SERVICE_URL
+              value: {{ $svc.dependencies.STORAGE_SERVICE_URL }}
+          {{- end }}
+          {{- if eq $svc.name "storage" }}
+{{ include "miraculin.storageSecrets" $ | indent 12 }}
+            - name: DB_HOST
+              value: "{{ ternary $.Values.db.prod.host $.Values.db.test.host $.Values.setEnvVar.prod }}"
+            - name: DB_PORT
+              value: "{{ ternary $.Values.db.prod.port $.Values.db.test.port $.Values.setEnvVar.prod }}"
+          {{- end }}
           resources:
             requests:
-              cpu: {{ $service.resources.requests.cpu }}
-              memory: {{ $service.resources.requests.memory }}
+              cpu: {{ $svc.resources.requests.cpu }}
+              memory: {{ $svc.resources.requests.memory }}
             limits:
-              cpu: {{ $service.resources.limits.cpu }}
-              memory: {{ $service.resources.limits.memory }}
-{{- $envVars := include "miraculin.envVars" $ | trim }}
-{{- $storageSecrets := include "miraculin.storageSecrets" $ | trim }}
-{{ include "miraculin.envDependencies" $service | indent 12 }}
-{{- if or $envVars $storageSecrets $envDependencies }}
-          env:
-{{- if eq $key "storage" }}
-{{ $storageSecrets | indent 12 }}
-{{ $envVars | indent 12 }}
-{{ $envDependencies | indent 12 }}
-{{- else }}
-{{ $envVars | indent 12 }}
-{{ $envDependencies | indent 12 }}
-{{- end }}
-{{- end }}
----
-{{- if eq $key "web" }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $service.name }}
-  namespace: {{ include "miraculin.namespace" $ }}
-spec:
-  type: LoadBalancer
-  selector:
-    app: {{ $service.name }}
-  ports:
-    - port: {{ $service.port }}
-      targetPort: {{ $service.targetPort }}
-      nodePort: {{ include "miraculin.nodePort" $ }}
-{{- end }}
+              cpu: {{ $svc.resources.limits.cpu }}
+              memory: {{ $svc.resources.limits.memory }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ $svc.targetPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ $svc.targetPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          securityContext:
+            runAsUser: 1000
 {{- end }}

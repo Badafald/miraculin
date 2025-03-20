@@ -1,18 +1,18 @@
-{{- range $key, $service := .Values.services }}
+{{- range $key, $svc := .Values.services }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $service.name }}
+  name: {{ $svc.name }}-service
   namespace: {{ include "miraculin.namespace" $ }}
 spec:
   selector:
-    app: {{ $service.name }}
+    app: {{ $svc.name }}-service
   ports:
-    - port: {{ $service.port }}
-      targetPort: {{ $service.targetPort }}
-      {{- if eq $service.type "LoadBalancer" }}
-      nodePort: {{ include "miraculin.nodePort" $ }}
-      {{- end }}
-  type: {{ $service.type }}
----
+    - port: {{ $svc.port }}
+      targetPort: {{ $svc.targetPort }}
+  {{- if eq $svc.type "LoadBalancer" }}
+      nodePort: {{ ternary $svc.nodePort.prod $svc.nodePort.test $.Values.setEnvVar.prod }}
+  {{- end }}
+  type: {{ $svc.type }}
 {{- end }}
