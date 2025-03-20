@@ -3,20 +3,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $svc.name }}-service
+  name: {{ $svc.name }}
   namespace: {{ include "miraculin.namespace" $ }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ $svc.name }}-service
+      app: {{ $svc.name }}
   template:
     metadata:
       labels:
-        app: {{ $svc.name }}-service
+        app: {{ $svc.name }}
     spec:
       containers:
-        - name: {{ $svc.name }}-service
+        - name: {{ $svc.name }}
           image: {{ $.Values.repo }}-{{ $svc.name }}:{{ $svc.version }}
           ports:
             - containerPort: {{ $svc.targetPort }}
