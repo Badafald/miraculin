@@ -79,12 +79,19 @@ pipeline {
                 }
             }
         }
+        stage('Opening The Void') {
+            steps {
+        echo '⚠ Initiating dimensional rift... hold tight.'
+        }
+        }
 
-        stage('Build and Push Images with Check') {
+        stage('Build and Push Images Into The Abyss') {
             parallel {
                 stage('Encryption Service') {
                     steps {
                         script {
+                            echo 'Cargo deployment... entering the void.'
+
                             def ENC_VER = readFile('app/encryption_service/version').trim()
                             def ENC_IMAGE = "badafald/miraculin-encrypt:${ENC_VER}"
                             def encExists = sh(script: "docker manifest inspect ${ENC_IMAGE} > /dev/null 2>&1 && echo 0 || echo 1", returnStdout: true).trim()
