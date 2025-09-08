@@ -6,15 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Badafald/miraculin.git'
+    repoURL: "https://github.com/Badafald/miraculin.git"
     targetRevision: HEAD
     path: helm
     helm:
       valueFiles:
         - values-storage.yaml
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: test-miraculin-ns
+    server: "https://kubernetes.default.svc"
+    namespace: miraculin-ns
   syncPolicy:
     automated:
       prune: true
