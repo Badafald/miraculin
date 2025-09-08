@@ -19,7 +19,7 @@ db:
 services:
   storage:
     name: storage
-    version: v0.2.4
+    version: v0.2.5
     targetPort: 5002
     port: 5002
     resources:
