@@ -11,7 +11,7 @@ repo: badafald/miraculin
 services:
   web:
     name: web
-    version: v0.2.5
+    version: v0.2.6
     targetPort: 5000
     port: 5000
     type: NodePort
