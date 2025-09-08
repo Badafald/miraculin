@@ -2,9 +2,9 @@
 # use (true/false) or (false/true) only, made for security considerations
 
 setEnvVar:
-  test: true
+  test: false
   # Only one of these two can be true
-  prod: false
+  prod: true
 
 repo: badafald/miraculin
 
@@ -15,7 +15,6 @@ db:
   prod:
     host: "192.168.0.103" #same for now
     port: "5432"
-
 
 services:
   storage:
@@ -30,4 +29,3 @@ services:
       limits:
         cpu: 300m
         memory: 256Mi
-

@@ -2,9 +2,9 @@
 # use (true/false) or (false/true) only, made for security considerations
 
 setEnvVar:
-  test: true
+  test: false
   # Only one of these two can be true
-  prod: false
+  prod: true
 
 repo: badafald/miraculin
 
